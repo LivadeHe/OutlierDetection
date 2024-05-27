@@ -1,0 +1,244 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Outlier Detection for Customer Orders",
+    "description": "This API provides comprehensive analysis tools for detecting outliers in customer orders, using advanced algorithms to identify unusual patterns and ensure data quality.",
+    "contact": {
+      "email": "fhb211143@fh-vie.ac.at"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.1"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/LisavandenHeuvel/outlierdetection/1.0.1",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Order Analysis",
+      "description": "Operations related to the analysis of customer orders for outlier detection."
+    }
+  ],
+  "paths": {
+    "/outlierdetection/analyzeorder": {
+      "post": {
+        "tags": [
+          "Order Analysis"
+        ],
+        "summary": "Analyze a Customer Order for Outliers",
+        "description": "Analyzes a new customer order to detect potential outliers based on various metrics \nsuch as order size, item combination, and historical data patterns. It returns detailed \nanalysis results, indicating whether the order is classified as an outlier and \nprovides reasons for the classification.\n",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/outlierdetection_analyzeorder_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully analyzed the order with detailed results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request - The request could not be processed due to incorrect format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OrderRequest": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "The unique customer ID"
+          },
+          "order_id": {
+            "type": "string",
+            "description": "The unique order ID"
+          },
+          "order_date": {
+            "type": "string",
+            "description": "Date and time when the order was placed",
+            "format": "date-time"
+          },
+          "min_outlier_percentage": {
+            "type": "integer",
+            "description": "The minimum percentage required to classify an order as an outlier"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            }
+          }
+        }
+      },
+      "OrderItem": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "description": "The product item number"
+          },
+          "size": {
+            "type": "string",
+            "description": "The size of the product"
+          },
+          "color": {
+            "type": "string",
+            "description": "The color of the product"
+          },
+          "brand": {
+            "type": "string",
+            "description": "The brand of the product"
+          },
+          "collection": {
+            "type": "string",
+            "description": "The collection to which the product belongs"
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "The ordered quantity of the product"
+          },
+          "attribute_x": {
+            "type": "string",
+            "description": "Further attributes of the product"
+          },
+          "attribute_y": {
+            "type": "string",
+            "description": "Further attributes of the product"
+          },
+          "attribute_z": {
+            "type": "integer",
+            "description": "Further attributes of the product"
+          }
+        }
+      },
+      "AnalysisResult": {
+        "type": "object",
+        "properties": {
+          "customer_id": {
+            "type": "string",
+            "description": "The unique customer ID"
+          },
+          "order_id": {
+            "type": "string",
+            "description": "The unique order ID"
+          },
+          "is_outlier": {
+            "type": "boolean",
+            "description": "Indicates if the order is classified as an outlier"
+          },
+          "outlier_percentage": {
+            "type": "integer",
+            "description": "The percentage of the order classified as an outlier"
+          },
+          "reasons_code": {
+            "type": "array",
+            "description": "List of reasons why the order was classified as an outlier",
+            "example": "1; Unusually high order quantity, 2; Rare combination of product options...",
+            "items": {
+              "type": "object"
+            }
+          },
+          "items_details": {
+            "type": "array",
+            "description": "Detailed list of items that triggered the outlier detection",
+            "items": {
+              "$ref": "#/components/schemas/OrderItem"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-04-18T12:51:17.318Z"
+          }
+        }
+      },
+      "OutlierHistory": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/AnalysisResult"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The specific error code",
+            "example": "ERR_NO_BACKEND"
+          },
+          "message": {
+            "type": "string",
+            "description": "The error message",
+            "example": "Backend not available at the moment"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-04-18T12:51:17.318Z"
+          }
+        }
+      },
+      "outlierdetection_analyzeorder_body": {
+        "required": [
+          "OrderRequest"
+        ],
+        "type": "object",
+        "properties": {
+          "OrderRequest": {
+            "$ref": "#/components/schemas/OrderRequest"
+          },
+          "OutlierHistory": {
+            "$ref": "#/components/schemas/OutlierHistory"
+          }
+        }
+      }
+    }
+  }
+}

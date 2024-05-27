@@ -1,0 +1,38 @@
+Package:     api             --> Alle Klassen hängen direkt mit dem Web-API zusammen
+    Class:
+        -
+
+
+Package:     configuration   --> Alle Klasse die für die Konfiguration  verschiedener Aspekte
+    Class:
+        - CustomInstantDeserializer
+                >> Verwandelt Datum- und Zeitformaten, die von Jackson nicht unterstützt werden, vorallem bei D
+        - HomeController
+                >> Leitet die Root-URL zur Swagger Userinterface-Seite um, was die API-Dokumentation über das Web-Root zugänglich macht
+        - JacksonConfiguration
+                >> Konfiguriert Jacksons Objekt-Mapper um sicherzustellen, dass JSON-Daten korrekt in Java-Objekte umgewandelt werden.
+        - LocalDateConverter
+                >> Wandelt
+        - LocalDateTimeConverter
+                >>
+        - SwaggerDocumentationConfig
+                >>
+        - SwaggerUIConfiguartion
+                >>
+
+
+
+Package:    model           --> Alle Datenstrukturen / Schemas
+    Class:
+        - AnalysisResult:
+                >> Das Ergebnis von der Ausreißererkennung. Umfasst daten wie Kunden-ID, Bestell-ID, ob die Bestellung ein Ausreißer sein könnte, die Gründe dafür etc.
+        - Error
+                >> Zur Darstellung von Fehlerdetails in API-Responses (Antworten). Enthält Fehlercode, eine Nachricht und Zeitstempel
+        - OrderItem
+                >> Der Artikel innerhalb einer Bestellung, mit alle Attributen wie Artikel-ID, Größe, Farbe etc.
+        - Order Request
+                >> Den "Request-Body" für die Ausreißererkennung, inklusiv Kunden-ID, Bestell-ID, Datum und eine Liste mit alle "Order Items"
+        - OutlierdetectionAnalyzeorderBody
+                >> Fügt "OrderRequest" und "OutlierHistory" zusammen zu einem "Body" für die Ausreißererkennung
+        - OutlierHistory
+                >> Eine Sammlung von "AnalysisResult"-Objekten, von potenziellen früheren Ausreißer. Kann als Zusatzparameter in der Body mit übermittelt werden.
