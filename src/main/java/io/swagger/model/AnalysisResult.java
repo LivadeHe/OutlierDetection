@@ -2,6 +2,7 @@ package io.swagger.model;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.OrderItem;
@@ -25,15 +26,19 @@ import javax.validation.constraints.*;
 
 public class AnalysisResult {
     @JsonProperty("customer_id")
+    @NotNull(message = "Customer ID is required")
     private String customerId = null;
 
     @JsonProperty("order_id")
+    @NotNull(message = "Order ID is required")
     private String orderId = null;
 
     @JsonProperty("is_outlier")
     private Boolean isOutlier = null;
 
     @JsonProperty("outlier_percentage")
+    @Min(value = 0, message = "Outlier percentage must be 0 or positive")
+    @NotNull(message = "outlier_percentage is required")
     private Integer outlierPercentage = null;
 
     @JsonProperty("reasons_code")
@@ -42,9 +47,12 @@ public class AnalysisResult {
 
     @JsonProperty("items_details")
     @Valid
+    @NotEmpty(message = "Items details cannot be empty")
     private List<OrderItem> itemsDetails = null;
 
     @JsonProperty("timestamp")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
+    @NotNull(message = "Timestamp is required")
     private OffsetDateTime timestamp = null;
 
     // Zusätzlich - für das Testing hinzugefügt
