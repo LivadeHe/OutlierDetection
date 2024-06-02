@@ -90,26 +90,44 @@
   "components": {
     "schemas": {
       "OrderRequest": {
+        "required": [
+          "customer_id",
+          "items",
+          "order_date",
+          "order_id",
+          "timestamp"
+        ],
         "type": "object",
         "properties": {
           "customer_id": {
             "type": "string",
-            "description": "The unique customer ID"
+            "description": "The unique customer ID",
+            "example": "123456"
           },
           "order_id": {
             "type": "string",
-            "description": "The unique order ID"
+            "description": "The unique order ID",
+            "example": "789012"
           },
           "order_date": {
             "type": "string",
             "description": "Date and time when the order was placed",
-            "format": "date-time"
+            "format": "date-time",
+            "example": "2024-05-31T12:00:00Z"
           },
           "min_outlier_percentage": {
             "type": "integer",
-            "description": "The minimum percentage required to classify an order as an outlier"
+            "description": "The minimum percentage required to classify an order as an outlier",
+            "nullable": true,
+            "example": 75
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-04-18T12:51:17.318Z"
           },
           "items": {
+            "minItems": 1,
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/OrderItem"
@@ -118,31 +136,41 @@
         }
       },
       "OrderItem": {
+        "required": [
+          "item_id",
+          "quantity"
+        ],
         "type": "object",
         "properties": {
           "item_id": {
             "type": "string",
-            "description": "The product item number"
-          },
-          "size": {
-            "type": "string",
-            "description": "The size of the product"
-          },
-          "color": {
-            "type": "string",
-            "description": "The color of the product"
-          },
-          "brand": {
-            "type": "string",
-            "description": "The brand of the product"
-          },
-          "collection": {
-            "type": "string",
-            "description": "The collection to which the product belongs"
+            "description": "The product item number",
+            "example": "SKU123"
           },
           "quantity": {
             "type": "integer",
-            "description": "The ordered quantity of the product"
+            "description": "The ordered quantity of the product",
+            "example": 2
+          },
+          "size": {
+            "type": "string",
+            "description": "The size of the product",
+            "example": "XL"
+          },
+          "color": {
+            "type": "string",
+            "description": "The color of the product",
+            "example": "Red"
+          },
+          "brand": {
+            "type": "string",
+            "description": "The brand of the product",
+            "example": "Brand X"
+          },
+          "collection": {
+            "type": "string",
+            "description": "The collection to which the product belongs",
+            "example": "Summer 2024"
           },
           "attribute_x": {
             "type": "string",
@@ -159,33 +187,54 @@
         }
       },
       "AnalysisResult": {
+        "required": [
+          "customer_id",
+          "items_details",
+          "order_id",
+          "outlier_percentage",
+          "timestamp"
+        ],
         "type": "object",
         "properties": {
           "customer_id": {
             "type": "string",
-            "description": "The unique customer ID"
+            "description": "The unique customer ID",
+            "example": "123456"
           },
           "order_id": {
             "type": "string",
-            "description": "The unique order ID"
+            "description": "The unique order ID",
+            "example": "789012"
           },
           "is_outlier": {
             "type": "boolean",
-            "description": "Indicates if the order is classified as an outlier"
+            "description": "Indicates if the order is classified as an outlier",
+            "example": true
           },
           "outlier_percentage": {
             "type": "integer",
-            "description": "The percentage of the order classified as an outlier"
+            "description": "The percentage of the order classified as an outlier",
+            "example": 85
           },
           "reasons_code": {
             "type": "array",
             "description": "List of reasons why the order was classified as an outlier",
-            "example": "1; Unusually high order quantity, 2; Rare combination of product options...",
+            "example": [
+              {
+                "reason_code": 1,
+                "reason_description": "Unusually high order quantity"
+              },
+              {
+                "reason_code": 2,
+                "reason_description": "Rare combination of product options"
+              }
+            ],
             "items": {
               "type": "object"
             }
           },
           "items_details": {
+            "minItems": 1,
             "type": "array",
             "description": "Detailed list of items that triggered the outlier detection",
             "items": {
@@ -206,17 +255,22 @@
         }
       },
       "Error": {
+        "required": [
+          "code",
+          "message",
+          "timestamp"
+        ],
         "type": "object",
         "properties": {
           "code": {
             "type": "string",
             "description": "The specific error code",
-            "example": "ERR_NO_BACKEND"
+            "example": "400"
           },
           "message": {
             "type": "string",
             "description": "The error message",
-            "example": "Backend not available at the moment"
+            "example": "Request format does not match the specified format"
           },
           "timestamp": {
             "type": "string",
